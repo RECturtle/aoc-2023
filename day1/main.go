@@ -76,7 +76,7 @@ func dayTwo(lines []string) {
 }
 
 func main() {
-	data, err := os.ReadFile("input1.txt")
+	data, err := os.ReadFile("input.txt")
 
 	if err != nil {
 		fmt.Println("Error reading file: ", err)
