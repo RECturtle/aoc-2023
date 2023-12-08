@@ -24,7 +24,7 @@ func readFiles(data []byte) []string {
 	return strings.Split(string(data), "\n")
 }
 
-func dayOne(lines []string) {
+func partOne(lines []string) {
 	var sum int
 	for _, v := range lines {
 		codes := regexp.MustCompile(`[^\d]+`).ReplaceAllString(v, "")
@@ -41,7 +41,7 @@ func dayOne(lines []string) {
 	fmt.Printf("Day 1: %d\n", sum)
 }
 
-func dayTwo(lines []string) {
+func partTwo(lines []string) {
 	var sum int
 
 	for _, line := range lines {
@@ -84,6 +84,6 @@ func main() {
 
 	codes := readFiles(data)
 
-	dayOne(codes)
-	dayTwo(codes)
+	partOne(codes)
+	partTwo(codes)
 }

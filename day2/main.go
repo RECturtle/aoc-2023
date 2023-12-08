@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"regexp"
 	"strconv"
@@ -16,47 +17,60 @@ var maxBlockMap = map[string]int{
 
 func main() {
 	var sum int
+	var minSum int
 	var digitRegex = regexp.MustCompile(`\d+`)
 
 	data, err := os.ReadFile("input.txt")
 
 	if err != nil {
-		fmt.Println("Error reading file: ", err)
+		fmt.Println("Error reading file:", err)
 	}
 
 	lines := strings.Split(string(data), "\n")
 
 	for _, line := range lines {
+		var minBlockCount = make(map[string]int)
 		countGame := true
+		power := 1
 
 		gameData := strings.Split(line, ": ")
-
 		gameIndex, _ := strconv.Atoi(digitRegex.FindString(gameData[0]))
 		gameScoreList := gameData[1:][0]
-
 		gameCounts := strings.Split(gameScoreList, "; ")
 
-		// Loop through the set of cube pulls to see if any break the max value for each color
-	countCheck:
 		for _, gameSet := range gameCounts {
 			cubeCounts := strings.Split(gameSet, ", ")
 
 			for _, cubeCount := range cubeCounts {
 				countSet := strings.Split(cubeCount, " ")
+				color := countSet[1]
 				count, _ := strconv.Atoi(countSet[0])
 
-				// Compare the number of cubes pulled for the color
-				// against the max value in the map
-				if count > maxBlockMap[countSet[1]] {
+				// Set minBlockCount for the current color
+				if m, ok := minBlockCount[color]; ok {
+					minBlockCount[color] = int(math.Max(float64(m), float64(count)))
+				} else {
+					minBlockCount[color] = count
+				}
+
+				// If too many blocks pulled, don't count the index towards total
+				if count > maxBlockMap[color] {
 					countGame = false
-					break countCheck
 				}
 			}
 		}
+
+		// Calculate values for answers
+		for _, v := range minBlockCount {
+			power *= v
+		}
+		minSum += power
 
 		if countGame {
 			sum += gameIndex
 		}
 	}
-	fmt.Println(sum)
+
+	fmt.Println("Part One:", sum)
+	fmt.Println("Part Two:", minSum)
 }
