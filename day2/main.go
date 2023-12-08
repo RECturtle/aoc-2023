@@ -42,12 +42,12 @@ func main() {
 			cubeCounts := strings.Split(gameSet, ", ")
 
 			for _, cubeCount := range cubeCounts {
-				c := strings.Split(cubeCount, " ")
-				s, _ := strconv.Atoi(c[0])
+				countSet := strings.Split(cubeCount, " ")
+				count, _ := strconv.Atoi(countSet[0])
 
 				// Compare the number of cubes pulled for the color
 				// against the max value in the map
-				if s > maxBlockMap[c[1]] {
+				if count > maxBlockMap[countSet[1]] {
 					countGame = false
 					break countCheck
 				}
