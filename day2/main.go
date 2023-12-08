@@ -16,8 +16,8 @@ var maxBlockMap = map[string]int{
 }
 
 func main() {
-	var sum int
-	var minSum int
+	var partOneSum int
+	var partTwoSum int
 	var digitRegex = regexp.MustCompile(`\d+`)
 
 	data, err := os.ReadFile("input.txt")
@@ -36,9 +36,9 @@ func main() {
 		gameData := strings.Split(line, ": ")
 		gameIndex, _ := strconv.Atoi(digitRegex.FindString(gameData[0]))
 		gameScoreList := gameData[1:][0]
-		gameCounts := strings.Split(gameScoreList, "; ")
+		allGameSets := strings.Split(gameScoreList, "; ")
 
-		for _, gameSet := range gameCounts {
+		for _, gameSet := range allGameSets {
 			cubeCounts := strings.Split(gameSet, ", ")
 
 			for _, cubeCount := range cubeCounts {
@@ -46,17 +46,8 @@ func main() {
 				color := countSet[1]
 				count, _ := strconv.Atoi(countSet[0])
 
-				// Set minBlockCount for the current color
-				if m, ok := minBlockCount[color]; ok {
-					minBlockCount[color] = int(math.Max(float64(m), float64(count)))
-				} else {
-					minBlockCount[color] = count
-				}
-
-				// If too many blocks pulled, don't count the index towards total
-				if count > maxBlockMap[color] {
-					countGame = false
-				}
+				partOne(color, count, &countGame)
+				partTwo(color, count, minBlockCount)
 			}
 		}
 
@@ -64,13 +55,28 @@ func main() {
 		for _, v := range minBlockCount {
 			power *= v
 		}
-		minSum += power
+
+		partTwoSum += power
 
 		if countGame {
-			sum += gameIndex
+			partOneSum += gameIndex
 		}
 	}
 
-	fmt.Println("Part One:", sum)
-	fmt.Println("Part Two:", minSum)
+	fmt.Println("Part One:", partOneSum)
+	fmt.Println("Part Two:", partTwoSum)
+}
+
+func partOne(color string, count int, countGame *bool) {
+	if count > maxBlockMap[color] {
+		*countGame = false
+	}
+}
+
+func partTwo(color string, count int, minBlockCount map[string]int) {
+	if m, ok := minBlockCount[color]; ok {
+		minBlockCount[color] = int(math.Max(float64(m), float64(count)))
+	} else {
+		minBlockCount[color] = count
+	}
 }
