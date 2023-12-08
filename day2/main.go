@@ -17,6 +17,7 @@ var maxBlockMap = map[string]int{
 func main() {
 	var sum int
 	var digitRegex = regexp.MustCompile(`\d+`)
+
 	data, err := os.ReadFile("input.txt")
 
 	if err != nil {
@@ -33,12 +34,12 @@ func main() {
 		gameIndex, _ := strconv.Atoi(digitRegex.FindString(gameData[0]))
 		gameScoreList := gameData[1:][0]
 
-		gameScores := strings.Split(gameScoreList, "; ")
+		gameCounts := strings.Split(gameScoreList, "; ")
 
 		// Loop through the set of cube pulls to see if any break the max value for each color
 	countCheck:
-		for _, cubes := range gameScores {
-			cubeCounts := strings.Split(cubes, ", ")
+		for _, gameSet := range gameCounts {
+			cubeCounts := strings.Split(gameSet, ", ")
 
 			for _, cubeCount := range cubeCounts {
 				c := strings.Split(cubeCount, " ")
