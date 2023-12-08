@@ -38,9 +38,6 @@ func main() {
 		// Loop through the set of cube pulls to see if any break the max value for each color
 	countCheck:
 		for _, cubes := range gameScores {
-			if !countGame {
-				fmt.Println("I shouldn't be here")
-			}
 			cubeCounts := strings.Split(cubes, ", ")
 
 			for _, cubeCount := range cubeCounts {
